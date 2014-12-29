@@ -1,0 +1,4 @@
+--require test/unit/mochaGlobals.js
+--ui bdd
+--reporter spec
+--recursive 

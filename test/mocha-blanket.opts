@@ -1,0 +1,4 @@
+--require test/js/unit/mochaGlobals.js
+--no-exit
+--reporter html-cov
+--recursive 

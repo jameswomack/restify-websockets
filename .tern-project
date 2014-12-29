@@ -1,0 +1,12 @@
+{
+    "libs": [
+        "ecma5"
+    ],
+    "loadEagerly": [
+        "./node_modules/restify/lib/index.js",
+        "./node_modules/lodash/lodash.js"
+    ],
+    "plugins": {
+        "node": {}
+    }
+}
