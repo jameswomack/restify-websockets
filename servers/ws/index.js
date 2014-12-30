@@ -11,8 +11,13 @@ function WSServer(server){
                 recipients.push(client._ultron.id);
             }
         }
-        console.info('Dispatched '+data+' from sender "' + excludeId +
+        if(recipients.length){
+            console.info('Dispatched '+data+' from sender "' + excludeId +
                      '" to recipients "' + recipients.join('", "') +'".');
+        }else{
+            console.info('Received '+data+' but did not dispatch as there '  +
+                    'are no other connected clients.');
+        }
     }.bind(wss);
 
     wss.on('connection', function(ws) {

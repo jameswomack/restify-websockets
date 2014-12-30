@@ -1,3 +1,5 @@
+'use strict';
+
 var stylish = require('jshint-stylish');
 var browserify = require('browserify');
 var transform = require('vinyl-transform');
@@ -45,31 +47,32 @@ function lintMe(path){
 */
 
 // Rerun the task when a file changes
-gulp.task('watch', function () {
-  gulp.watch(paths.client.css, ['stylus']);
-  gulp.watch(paths.client.js, ['clientLint', 'browserify']);
-  gulp.watch(paths.client.html, ['templatesJade', 'indexJade']);
-  gulp.watch(paths.server.js, ['serverLint']);
+gulp.task(function watch(){
+  //gulp.watch(paths.client.css, ['stylus']);
+  gulp.watch(paths.client.js, gulp.series('clientLint','bruglify'));
+  gulp.watch(paths.client.html, gulp.parallel('templatesJade','indexJade'));
+  gulp.watch(paths.server.js, gulp.series('serverLint'));
 });
 
 
-gulp.task('daemon', function () {
+gulp.task(function daemon(){
   return nodemon({
     script: './servers/http/index.js',
     ext: 'js',
+    watch: [paths.client.js,paths.client.html,paths.server.js],
     env: {
       'NODE_ENV': 'development'
     }
   })
-    .on('start', ['watch'])
-    .on('change', ['watch'])
+    .on('start',  gulp.series('watch'))
+    .on('change', gulp.series('watch'))
     .on('restart', function () {
       console.info('restarted!');
     });
 });
 
 
-gulp.task('browserify', function () {
+gulp.task(function bruglify(){
   var browserified = transform(function(filename) {
     var b = browserify(filename);
     return b.bundle();
@@ -81,23 +84,24 @@ gulp.task('browserify', function () {
     .pipe(gulp.dest('./public/js'));
 });
 
-gulp.task('indexJade', function() {
+gulp.task(function indexJade(){
   return jadeMe(paths.client.html[0],
         './public/');
 });
-gulp.task('templatesJade', function() {
+gulp.task(function templatesJade(){
   return jadeMe(paths.client.html[1],
         './public/templates/');
 });
-gulp.task('jade', ['indexJade','templatesJade']);
+gulp.task('jade', gulp.parallel('indexJade','templatesJade'));
 
-gulp.task('clientLint', function() {
+gulp.task(function clientLint(){
   return lintMe(paths.client.js);
 });
-gulp.task('serverLint', function() {
+gulp.task(function serverLint(){
   return lintMe(paths.server.js);
 });
-gulp.task('lint', ['clientLint','serverLint']);
+gulp.task('lint',        gulp.parallel('clientLint','serverLint'));
 
-// This runs if you simply enter `gulp`
-gulp.task('default', ['browserify','jade','lint','daemon']);
+gulp.task('daemon:prep', gulp.parallel('bruglify','jade','lint'));
+
+gulp.task('default',     gulp.series('daemon:prep','daemon'));

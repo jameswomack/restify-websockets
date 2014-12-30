@@ -1,29 +1,28 @@
 {
   "name": "nbl",
-  "version": "1.0.0",
-  "description": "",
+  "version": "1.0.0-alpha1",
+  "description": "Restify & Websockets",
   "main": "index.js",
   "scripts": {
     "start": "gulp",
     "test": "mocha test/unit/specs/**/*.js",
     "cover": "mocha --opts test/mocha-blanket.opts test/unit/specs/**/*.js > test/unit/output/coverage.html && open test/unit/output/coverage.html"
   },
-  "author": "",
+  "author": "James J. Womack",
+  "repository": "https://github.com/jameswomack/restify-websockets",
   "license": "ISC",
   "dependencies": {
-    "lodash": "^2.4.1",
-    "ws": "^0.6.3"
+    "lodash": "2.4.1",
+    "ws": "0.6.3"
   },
   "devDependencies": {
     "blanket": "1.1.6",
     "chai": "1.10.0",
-    "chai-spies": "^0.5.1",
-    "glob": "4.0.6",
-    "gulp": "3.8.9",
-    "gulp-flatten": "0.0.4",
-    "gulp-jade": "^0.10.0",
+    "chai-spies": "0.5.1",
+    "gulp": "git://github.com/gulpjs/gulp#4.0",
+    "gulp-jade": "0.10.0",
     "gulp-jshint": "1.8.6",
-    "gulp-nodemon": "^1.0.4",
+    "gulp-nodemon": "1.0.4",
     "jsdom": "1.5.0",
     "jshint-stylish": "1.0.0",
     "mocha": "2.0.1"
